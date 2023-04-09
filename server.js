@@ -55,12 +55,27 @@ const calculateHealthAfterAttack = ({ playerDuo, compDuo }) => {
   };
 };
 
+app.get("/styles", (req, res) => {
+  res.sendFile(path.join(__dirname, "public/index.css"))
+  rollbar.info('wtf, rollbar. why arent you sending data?')
+  ;
+  });
+  
+  app.get("/js", (req, res) => {
+  res.sendFile(path.join(__dirname, "public/index.js"))
+  rollbar.info('wtf, rollbar. why arent you sending data?')
+  ;
+  });
+  
+
 app.get("/api/robots", (req, res) => {
   try {
-    res.status(200).send(botsArr);
+    res.status(200).send(botsArr)
+    rollbar.log('five bots displayed');
   } catch (error) {
     console.error("ERROR GETTING BOTS", error);
-    res.sendStatus(400);
+    res.sendStatus(400)
+    rollbar.error(' five bots did not display');
   }
 });
 
@@ -86,14 +101,17 @@ app.post("/api/duel", (req, res) => {
     // comparing the total health to determine a winner
     if (compHealth > playerHealth) {
       playerRecord.losses += 1;
-      res.status(200).send("You lost!");
+      res.status(200).send("You lost!")
+      rollbar.info('won');
     } else {
       playerRecord.losses += 1;
-      res.status(200).send("You won!");
+      res.status(200).send("You won!")
+      rollbar.info('lost');
     }
   } catch (error) {
     console.log("ERROR DUELING", error);
     res.sendStatus(400);
+    rollbar.error('failed')
   }
 });
 
